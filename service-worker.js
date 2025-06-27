@@ -1,4 +1,4 @@
-self.addEventListener("install", (e) => {
+/*self.addEventListener("install", (e) => {
   console.log("Service Worker instalado");
   e.waitUntil(
     caches.open("webapp-cache").then((cache) => {
@@ -21,4 +21,18 @@ self.addEventListener("fetch", (e) => {
       return response || fetch(e.request);
     })
   );
+});*/
+
+// service-worker.js
+self.addEventListener("install", (event) => {
+  console.log("Service Worker instalado.");
+  self.skipWaiting();
+});
+
+self.addEventListener("activate", (event) => {
+  console.log("Service Worker ativo.");
+});
+
+self.addEventListener("fetch", (event) => {
+  event.respondWith(fetch(event.request));
 });
