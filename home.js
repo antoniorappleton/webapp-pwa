@@ -1,5 +1,8 @@
 import { auth, db } from "./firebase-config.js";
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  onAuthStateChanged,
+  signOut,
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
   collection,
   query,
@@ -7,11 +10,12 @@ import {
   getDocs,
   doc,
   updateDoc,
-  setDoc
+  setDoc,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 let userDocId = null; // para guardar o ID do documento do utilizador
 
+// Verifica se o utilizador está autenticado
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     alert("Utilizador não autenticado.");
@@ -19,7 +23,7 @@ onAuthStateChanged(auth, async (user) => {
     return;
   }
 
-  // Procura documento do utilizador
+  // Busca os dados do utilizador na base de dados
   const q = query(collection(db, "registos"), where("uid", "==", user.uid));
   const querySnapshot = await getDocs(q);
 
@@ -35,6 +39,7 @@ onAuthStateChanged(auth, async (user) => {
     document.getElementById("idade").value = data.idade;
   }
 
+  // Botão de guardar
   document.getElementById("guardarBtn").addEventListener("click", async () => {
     const nome = document.getElementById("nome").value;
     const idade = Number(document.getElementById("idade").value);
@@ -44,7 +49,7 @@ onAuthStateChanged(auth, async (user) => {
       email: user.email,
       nome: nome,
       idade: idade,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
     try {
@@ -54,10 +59,10 @@ onAuthStateChanged(auth, async (user) => {
         await updateDoc(ref, dados);
         alert("Registo atualizado!");
       } else {
-        // Criar novo documento se ainda não existir
+        // Criar novo documento
         const ref = doc(collection(db, "registos"));
         await setDoc(ref, dados);
-        userDocId = ref.id; // guarda o novo ID
+        userDocId = ref.id;
         alert("Novo registo criado!");
       }
 
@@ -67,5 +72,17 @@ onAuthStateChanged(auth, async (user) => {
     } catch (e) {
       alert("Erro ao guardar: " + e.message);
     }
+  });
+
+  // Botão de logout
+  document.getElementById("logoutBtn").addEventListener("click", () => {
+    signOut(auth)
+      .then(() => {
+        console.log("Sessão terminada.");
+        window.location.href = "index.html";
+      })
+      .catch((error) => {
+        console.error("Erro ao terminar sessão:", error);
+      });
   });
 });
