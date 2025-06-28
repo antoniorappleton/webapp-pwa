@@ -1,26 +1,48 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Home</title>
-  <link rel="stylesheet" href="style.css" />
-</head>
-<body>
-  <div class="container">
-    <h1>Bem-vindo!</h1>
-    <div class="label-dados">
-      <p><strong>Nome guardado:</strong> <span id="labelNome">-</span></p>
-      <p><strong>Idade guardada:</strong> <span id="labelIdade">-</span></p>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Bem-vindo!</h1>
+      <div class="label-dados">
+        <p><strong>Nome guardado:</strong> <span id="labelNome">-</span></p>
+        <p><strong>Idade guardada:</strong> <span id="labelIdade">-</span></p>
+      </div>
+
+      <input id="nome" type="text" placeholder="Nome completo" />
+      <input id="idade" type="number" placeholder="Idade" />
+      <button id="guardarBtn">Guardar</button>
+      <button id="logoutBtn">Logout</button>
     </div>
+    <script type="module" src="home.js"></script>
+    <script type="module">
+      import {
+        getAuth,
+        signOut,
+      } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+      import { app } from "./firebaseConfig.js"; // ou o caminho certo do teu config
 
-    <input id="nome" type="text" placeholder="Nome completo" />
-    <input id="idade" type="number" placeholder="Idade" />
-    <button id="guardarBtn">Guardar</button>
-    <button id="logoutBtn">Logout</button>
+      const auth = getAuth(app);
 
-  </div>
+      document.getElementById("logout-btn").addEventListener("click", () => {
+        signOut(auth)
+          .then(() => {
+            // Redireciona para a página inicial
+            window.location.href = "index.html";
 
-  <script type="module" src="home.js"></script>
-</body>
+            // Se quiseres limpar dados locais:
+            localStorage.clear();
+            sessionStorage.clear();
+          })
+          .catch((error) => {
+            console.error("Erro ao fazer logout:", error);
+          });
+      });
+    </script>
+  </body>
 </html>
