@@ -22,3 +22,18 @@ document.getElementById("loginBtn").addEventListener("click", () => {
     })
     .catch(error => alert(error.message));
 });
+
+document.getElementById("logoutBtn").addEventListener("click", () => {
+  signOut(auth)
+    .then(() => {
+      // Limpa os dados locais (opcional)
+      localStorage.clear();
+      sessionStorage.clear();
+
+      // Redireciona para o ecrã inicial
+      window.location.href = "index.html";
+    })
+    .catch((error) => {
+      console.error("Erro ao fazer logout:", error);
+    });;
+ });
