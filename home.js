@@ -1,4 +1,5 @@
 // home.js
+import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 import {
   getAuth,
   onAuthStateChanged,
@@ -64,4 +65,23 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
     .catch((error) => {
       console.error("Erro ao fazer logout:", error);
     });
+    
+
+const logoutBtn = document.getElementById("logoutBtn");
+
+logoutBtn.addEventListener("click", () => {
+  const auth = getAuth();
+  signOut(auth)
+    .then(() => {
+      console.log("Sessão terminada");
+      // Apagar campos (opcional)
+      localStorage.clear(); // se usares localStorage
+      sessionStorage.clear(); // se usares sessionStorage
+      // Redirecionar para index.html
+      window.location.href = "index.html";
+    })
+    .catch((error) => {
+      console.error("Erro ao terminar sessão:", error);
+    });
+});
 });
