@@ -1,5 +1,4 @@
 // home.js
-import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-auth.js";
 import {
   getAuth,
   onAuthStateChanged,
@@ -52,7 +51,7 @@ document.getElementById("guardarBtn").addEventListener("click", async () => {
 });
 
 // Logout
-document.getElementById("logoutBtn").addEventListener("click", () => {
+/*document.getElementById("logoutBtn").addEventListener("click", () => {
   signOut(auth)
     .then(() => {
       // Limpa os dados locais (opcional)
@@ -67,7 +66,7 @@ document.getElementById("logoutBtn").addEventListener("click", () => {
     });
     
 
-const logoutBtn = document.getElementById("logoutBtn");
+const logoutBtn = document.getElementById("logoutBtn");*/
 
 logoutBtn.addEventListener("click", () => {
   const auth = getAuth();
@@ -84,4 +83,4 @@ logoutBtn.addEventListener("click", () => {
       console.error("Erro ao terminar sessão:", error);
     });
 });
-});
+/*});*/
